@@ -32,14 +32,46 @@ void etatLED()
   server.send(200, "application/json", jsonBuffer);
 }
 
+/**
+ * @brief change l'état de la LED comme le bouton
+ * 
+ */
 void buttonPost()
 {
   String body = server.arg("plain");
   deserializeJson(jsonDocument, body);
-  digitalWrite(PIN_LED, ! digitalRead(PIN_LED));
+  digitalWrite(PIN_LED, !digitalRead(PIN_LED));
   server.send(200, "application/json", "{}");
 }
 
+// PUT /button active ou désactive la LED avec un argument /button/set?state=on ou /button/set?state=off
+void buttonPutSet()
+{
+  //String body = server.arg("plain");
+  //deserializeJson(jsonDocument, body);
+
+  String argState = server.arg("state");
+  deserializeJson(jsonDocument, argState);
+
+  if (argState == "on")
+  {
+    digitalWrite(PIN_LED, HIGH);
+    server.send(200, "application/json", "{\"state\":\"on\"}");
+  }
+  else if (argState == "off")
+  {
+    digitalWrite(PIN_LED, LOW);
+    server.send(200, "application/json", "{\"state\":\"off\"}");
+  }
+  else
+    // erreur 400 : Bad Request
+    server.send(400, "application/json", "{}");
+}
+
+/**
+ * @brief initialisation
+ * 
+ */
 void setup()
 {
   Serial.begin(9600L);
@@ -62,16 +94,24 @@ void setup()
   digitalWrite(PIN_LED, HIGH);
   Serial.println("IP : " + WiFi.localIP().toString());
 
+  //==========================================
   // définition des routes pour le serveur web
-  //
+  //==========================================
   // GET /ledstate retourne l'état de la lampe (ON ou OFF)
   server.on("/ledState", etatLED);
   // POST /button active ou désactive la LED
   server.on("/button", HTTP_POST, buttonPost);
+  // PUT /button active ou désactive la LED avec un argument /button/set?state=on ou /button/set?state=off
+  server.on("/button/set", HTTP_PUT, buttonPutSet);
+
   // démarrage du serveur web
   server.begin();
 }
 
+/**
+ * @brief loop
+ * 
+ */
 void loop()
 {
   // On change l'état de la LED en pressant le bouton

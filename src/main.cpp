@@ -36,20 +36,17 @@ void etatLED()
  * @brief change l'état de la LED comme le bouton
  * 
  */
-void buttonPost()
+void buttonPostLedToggle()
 {
   String body = server.arg("plain");
   deserializeJson(jsonDocument, body);
   digitalWrite(PIN_LED, !digitalRead(PIN_LED));
-  server.send(200, "application/json", "{}");
+  server.send(200, "application/json", digitalRead(PIN_LED) == HIGH ? "{\"state\":\"on\"}" : "{\"state\":\"off\"}");
 }
 
-// PUT /button active ou désactive la LED avec un argument /button/set?state=on ou /button/set?state=off
-void buttonPutSet()
+// PUT /button active ou désactive la LED avec un argument /ledSet/state?state=on ou /button/set?state=off
+void buttonPutLedSet()
 {
-  //String body = server.arg("plain");
-  //deserializeJson(jsonDocument, body);
-
   String argState = server.arg("state");
   deserializeJson(jsonDocument, argState);
 
@@ -100,9 +97,9 @@ void setup()
   // GET /ledstate retourne l'état de la lampe (ON ou OFF)
   server.on("/ledState", etatLED);
   // POST /button active ou désactive la LED
-  server.on("/button", HTTP_POST, buttonPost);
-  // PUT /button active ou désactive la LED avec un argument /button/set?state=on ou /button/set?state=off
-  server.on("/button/set", HTTP_PUT, buttonPutSet);
+  server.on("/ledToggle", HTTP_POST, buttonPostLedToggle);
+  // PUT /button active ou désactive la LED avec un argument /ledSet?state=on ou off
+  server.on("/ledSet", HTTP_PUT, buttonPutLedSet);
 
   // démarrage du serveur web
   server.begin();

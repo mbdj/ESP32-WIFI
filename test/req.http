@@ -1,10 +1,10 @@
 GET http://192.168.1.27/ledState
 
 ###
-POST http://192.168.1.27/button
+POST http://192.168.1.27/ledToggle
 
 ###
-PUT  http://192.168.1.27/button/set HTTP/1.1
+PUT  http://192.168.1.27/ledSet HTTP/1.1
 host: 192.168.1.27
 accept: application/json
 content-type: application/json
@@ -14,8 +14,8 @@ content-type: application/json
 }
 
 ###
-PUT http://192.168.1.27/button/set?state=on
+PUT http://192.168.1.27/ledSet?state=on
 
 ###
-PUT http://192.168.1.27/button/set?state=off
+PUT http://192.168.1.27/ledSet?state=off
 

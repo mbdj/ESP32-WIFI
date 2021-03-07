@@ -14,7 +14,7 @@ const char *SSID{SSID_SECRET};
 const char *PASSWD{PASSWD_SECRET};
 const uint8_t PIN_LED{5};
 const uint8_t PIN_BUTTON{4};
-UnbouncedButton Bouton{PIN_BUTTON, INPUT_PULLDOWN};
+UnbouncedButton Bouton{PIN_BUTTON, INPUT_PULLDOWN, 50};
 
 StaticJsonDocument<200> jsonDocument;
 char jsonBuffer[200];
@@ -24,10 +24,10 @@ WebServer server;
 /**
  * @brief Réponse serveur json pour obtenir l'état de la LED (ON / OFF)
  */
-void etatLED()
+void ledState()
 {
   jsonDocument.clear();
-  jsonDocument["LEDstate"] = digitalRead(PIN_LED) ? "ON" : "OFF";
+  jsonDocument["state"] = digitalRead(PIN_LED) ? "on" : "off";
   serializeJson(jsonDocument, jsonBuffer);
   server.send(200, "application/json", jsonBuffer);
 }
@@ -44,7 +44,10 @@ void buttonPostLedToggle()
   server.send(200, "application/json", digitalRead(PIN_LED) == HIGH ? "{\"state\":\"on\"}" : "{\"state\":\"off\"}");
 }
 
-// PUT /button active ou désactive la LED avec un argument /ledSet/state?state=on ou /button/set?state=off
+/**
+ * @brief active ou désactive la LED avec un argument /ledSet/state?state=on ou /button/set?state=off
+ * 
+ */
 void buttonPutLedSet()
 {
   String argState = server.arg("state");
@@ -95,7 +98,7 @@ void setup()
   // définition des routes pour le serveur web
   //==========================================
   // GET /ledstate retourne l'état de la lampe (ON ou OFF)
-  server.on("/ledState", etatLED);
+  server.on("/ledState", ledState);
   // POST /button active ou désactive la LED
   server.on("/ledToggle", HTTP_POST, buttonPostLedToggle);
   // PUT /button active ou désactive la LED avec un argument /ledSet?state=on ou off

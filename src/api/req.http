@@ -1,0 +1,33 @@
+GET http://192.168.1.27/v1/ledState
+
+###
+POST http://192.168.1.27/v1/ledToggle
+
+### ne marche pas : POURQUOI ??? ###
+PUT  http://192.168.1.27/v1/ledSet HTTP/1.1
+Host: 192.168.1.27
+Content-Type: application/json
+Accept: application/json
+Connection: close
+
+{ "state": "off" }
+
+###
+PUT http://192.168.1.27/v1/ledSet?state=on
+
+###
+PUT http://192.168.1.27/v1/ledSet?state=off
+
+###
+PUT /v1/ledSet HTTP/1.1
+Host: 192.168.1.27
+Content-Type: application/x-www-form-urlencoded
+
+state=off
+
+###
+PUT /v1/ledSet HTTP/1.1
+Host: 192.168.1.27
+Content-Type: application/x-www-form-urlencoded
+
+state=on

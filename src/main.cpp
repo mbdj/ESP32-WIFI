@@ -41,7 +41,7 @@ void buttonPostLedToggle()
   String body = server.arg("plain");
   deserializeJson(jsonDocument, body);
   digitalWrite(PIN_LED, !digitalRead(PIN_LED));
-  server.send(200, "application/json", digitalRead(PIN_LED) == HIGH ? "{\"state\":\"on\"}" : "{\"state\":\"off\"}");
+  server.send(200, "application/json", digitalRead(PIN_LED) == HIGH ? "{\"state\": \"on\"}" : "{\"state\": \"off\"}");
 }
 
 /**
@@ -56,12 +56,12 @@ void buttonPutLedSet()
   if (argState == "on")
   {
     digitalWrite(PIN_LED, HIGH);
-    server.send(200, "application/json", "{\"state\":\"on\"}");
+    server.send(200, "application/json", "{\"state\": \"on\"}");
   }
   else if (argState == "off")
   {
     digitalWrite(PIN_LED, LOW);
-    server.send(200, "application/json", "{\"state\":\"off\"}");
+    server.send(200, "application/json", "{\"state\": \"off\"}");
   }
   else
     // erreur 400 : Bad Request
@@ -98,11 +98,11 @@ void setup()
   // définition des routes pour le serveur web
   //==========================================
   // GET /ledstate retourne l'état de la lampe (ON ou OFF)
-  server.on("/ledState", ledState);
+  server.on("/v1/ledState", ledState);
   // POST /button active ou désactive la LED
-  server.on("/ledToggle", HTTP_POST, buttonPostLedToggle);
+  server.on("/v1/ledToggle", HTTP_POST, buttonPostLedToggle);
   // PUT /button active ou désactive la LED avec un argument /ledSet?state=on ou off
-  server.on("/ledSet", HTTP_PUT, buttonPutLedSet);
+  server.on("/v1/ledSet", HTTP_PUT, buttonPutLedSet);
 
   // démarrage du serveur web
   server.begin();

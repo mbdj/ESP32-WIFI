@@ -1,0 +1,61 @@
+openapi: "3.0.2"
+info:
+  title: ESP32 API
+  description: API qui pilote l'esp32
+  version: "1.0"
+servers:
+  - url: http://esp32/v1
+
+components:
+  responses:
+    ledStateResponse:
+      description: returns the led'state ("on" or "off")
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - state
+            properties:
+              state:
+                type: string
+          example: { "state": "on" }
+
+paths:
+  /ledSet:
+    put:
+      description: set the led'state
+      requestBody:
+        description: state to turn on/off the led
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: string
+
+      responses:
+        "200":
+          $ref: "#components/responses/ledStateResponse"
+          description: Successful request
+        "400":
+          description: Bad request
+
+  /ledState:
+    get:
+      description: return the led state
+      responses:
+        "200":
+          $ref: "#components/responses/ledStateResponse"
+          description: Successful request
+        "400":
+          description: Bad request
+
+  /ledToggle:
+    post:
+      description: toggle the led state
+      responses:
+        "200":
+          $ref: "#components/responses/ledStateResponse"
+          description: ok
+        "400":
+          description: bad request

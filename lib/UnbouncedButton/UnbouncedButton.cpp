@@ -1,11 +1,10 @@
-#include <UnbouncedButton.h>
+#include <UnbouncedButton.hpp>
 
 UnbouncedButton::UnbouncedButton(uint8_t pin, uint8_t mode, unsigned long debounceDelay, Edge edge)
     : pin{pin}, mode{mode}, debounceDelay{debounceDelay}, edge{edge}
 {
     pinMode(pin, mode);
 };
-
 
 UnbouncedButton::ButtonState UnbouncedButton::buttonState(void)
 {
@@ -19,7 +18,7 @@ UnbouncedButton::ButtonState UnbouncedButton::buttonState(void)
     // On détecte le front montant ou descendant selon  PULLUP ou PULLDOWN
     if (edge == Edge::PRESSED)
     {
-        if ((mode == INPUT_PULLDOWN && buttonPinRead == HIGH && buttonPreviousState == LOW)|| (mode == INPUT_PULLUP && buttonPinRead == LOW && buttonPreviousState == HIGH))
+        if ((mode == INPUT_PULLDOWN && buttonPinRead == HIGH && buttonPreviousState == LOW) || (mode == INPUT_PULLUP && buttonPinRead == LOW && buttonPreviousState == HIGH))
             buttonState = ButtonState::PRESSED;
     }
     else if ((mode == INPUT_PULLDOWN && buttonPinRead == LOW && buttonPreviousState == HIGH) || (mode == INPUT_PULLUP && buttonPinRead == HIGH && buttonPreviousState == LOW))

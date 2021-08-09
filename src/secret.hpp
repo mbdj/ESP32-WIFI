@@ -1,0 +1,2 @@
+#define SSID_SECRET "WIFI_CEROU"
+#define PASSWD_SECRET "nogaro2014"

@@ -5,7 +5,7 @@ Mehdi Ben Djedidia 25/02/2021
 
 #include <Arduino.h>
 #include <WiFi.h>
-#include <secret.h>
+#include <secret.hpp>
 #include <WebServer.h>
 #include <ArduinoJson.h>
 #include <UnbouncedButton.h>
